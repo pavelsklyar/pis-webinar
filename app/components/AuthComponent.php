@@ -46,7 +46,7 @@ class AuthComponent extends Component
      *
      * @return bool
      */
-    public function auth($email, $password, $remember = null)
+    public function auth($email, $password)
     {
         $user = $this->getUser("email", $email);
 
@@ -56,12 +56,7 @@ class AuthComponent extends Component
             $auth_token = hash("sha256", $email . $password . time());
             $this->usersTable->update(['auth_token' => $auth_token], ['email' => $email]);
 
-            if ($remember) {
-                setcookie("auth_token", $auth_token, time() + App::$session->rememberMe, '/');
-            }
-            else {
-                setcookie("auth_token", $auth_token, time() + App::$session->life, '/');
-            }
+            setcookie("auth_token", $auth_token, time() + App::$session->life, '/');
 
             return true;
         }
@@ -82,14 +77,26 @@ class AuthComponent extends Component
      * @param $password
      * @return int
      */
-    public function register($email, $password)
+    public function register($email, $password, $passwordTwice, $surname, $name, $fathername, $status_id)
     {
-        $salt = $this->generateSalt();
-        $hashPassword = $this->generateHashPassword($password, $salt);
+        if ($password === $passwordTwice) {
+            $salt = $this->generateSalt();
+            $hashPassword = $this->generateHashPassword($password, $salt);
 
-        $user = new User($email, $hashPassword, $salt);
+            $user = new User($email, $hashPassword, $salt, $surname, $name, $fathername, $status_id);
 
-        return $this->usersTable->insert($user);
+            $insert = $this->usersTable->insert($user);
+
+            if (!is_array($insert)) {
+                return true;
+            }
+            else {
+                return "Ошибка при регистрации";
+            }
+        }
+        else {
+            return "Пароли не совпадают";
+        }
     }
 
     /**
@@ -110,6 +117,7 @@ class AuthComponent extends Component
 
             App::$session->user->setId(null);
             App::$session->user->setEmail(null);
+            App::$session->user->setRole(null);
 
             return true;
         }
@@ -158,6 +166,7 @@ class AuthComponent extends Component
         App::$session->user->auth = true;
         App::$session->user->setId($user['id']);
         App::$session->user->setEmail($user['email']);
+        App::$session->user->setRole($user['status_id']);
 
         return true;
     }

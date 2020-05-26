@@ -6,12 +6,24 @@ namespace app\controllers;
 
 use app\base\BaseController;
 use app\components\FacultiesComponent;
+use base\App;
 use base\Page;
 use base\View\View;
 
 class FacultiesController extends BaseController
 {
     private $component;
+
+    protected function checkAccess()
+    {
+        if (App::$session->user->getRole() == 3) {
+            $this->page->access = false;
+            new View("errors/access", $this->page);
+        }
+        else {
+            $this->page->access = true;
+        }
+    }
 
     public function __construct(Page &$page, $params)
     {

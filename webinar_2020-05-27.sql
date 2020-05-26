@@ -7,7 +7,7 @@
 #
 # Адрес: 127.0.0.1 (MySQL 5.7.29-0ubuntu0.18.04.1)
 # Схема: webinar
-# Время создания: 2020-05-26 17:38:43 +0000
+# Время создания: 2020-05-26 19:22:26 +0000
 # ************************************************************
 
 
@@ -70,6 +70,33 @@ VALUES
 UNLOCK TABLES;
 
 
+# Дамп таблицы status
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `status`;
+
+CREATE TABLE `status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `runame` varchar(45) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `status` WRITE;
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+
+INSERT INTO `status` (`id`, `name`, `runame`)
+VALUES
+	(1,'administrator','Администратор'),
+	(2,'dispetcher','Диспетчер'),
+	(3,'dekan','Декан'),
+	(4,'kadrovic','Кадровик');
+
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Дамп таблицы users
 # ------------------------------------------------------------
 
@@ -96,8 +123,9 @@ LOCK TABLES `users` WRITE;
 
 INSERT INTO `users` (`id`, `email`, `password`, `salt`, `name`, `surname`, `fathername`, `status_id`, `auth_token`)
 VALUES
-	(7,'admin@admin.ru','2db9a2cd5d3cdab76651c22b6d60df58992ab5c140899a320d017dda3c763cf0c60eee24cb80e306f9038d986c5b259b3cae6b6d6abf9d79deb376298daa2c9d','LHNNREGOQIMJMXQASMNOFWOBIFJHXQVNZUKYZXWKHIRBW','Admin','Admin','Admin',1,'f9dda7310e4cb2fb39bae58d2d68e37de11f6e452e60a1d82a5dcd67886ec9bb'),
-	(8,'user@user.ru','69e6317283b4439b4dcc38a5438aaa40e4dfbeb4f432b393f04e1cd34608f7172ca8f852c6a98fc94d52270f5ae56f5a50bd4a57c22e28142a918b249f82c71b','NROSTHLSPLSQNALSMBGOJJTSICIXCLMMMYDZZYYJIHIMP','user','user','user',2,'');
+	(7,'admin@admin.ru','2db9a2cd5d3cdab76651c22b6d60df58992ab5c140899a320d017dda3c763cf0c60eee24cb80e306f9038d986c5b259b3cae6b6d6abf9d79deb376298daa2c9d','LHNNREGOQIMJMXQASMNOFWOBIFJHXQVNZUKYZXWKHIRBW','Admin','Admin','Admin',1,''),
+	(8,'user@user.ru','69e6317283b4439b4dcc38a5438aaa40e4dfbeb4f432b393f04e1cd34608f7172ca8f852c6a98fc94d52270f5ae56f5a50bd4a57c22e28142a918b249f82c71b','NROSTHLSPLSQNALSMBGOJJTSICIXCLMMMYDZZYYJIHIMP','user','user','user',2,''),
+	(9,'dekan@dekan.ru','9b4360211c4e81b4c748e2c41dedca0846ddb45d722245f99a76925be0973e3f32ce5359e8b0e8af4d94f58cc3d2efdd3d3a1d474ddef1a48d42392552ccab86','TSICJZNLMMSMNHCANUDURLMMFEGCTQKJATVSXXHIFLTFB','dekan','dekan','dekan',3,'89b108c5b901220af48aa2f35c5f5ef45007abdb39f4dcb140e8504dc450c929');
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;

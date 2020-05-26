@@ -7,7 +7,7 @@ return [
     'name' => 'ErrCode Base Project',
 
     /** Относительные ссылки на главную страницу и страницу авторизации */
-    'homeUrl' => '/',
+    'homeUrl' => '/directions/',
     'authUrl' => '/',
 
     'database' => $database,
